@@ -1,0 +1,8 @@
+body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f4f9; }
+.player-card { background: white; padding: 2rem; border-radius: 12px; shadow: 0 4px 6px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+.controls { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+.btn-group { display: flex; justify-content: space-around; }
+button { padding: 10px 15px; cursor: pointer; border: none; border-radius: 5px; background: #007bff; color: white; transition: 0.2s; }
+button:hover { background: #0056b3; }
+.info { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+input[type="range"] { width: 100%; cursor: pointer; }
