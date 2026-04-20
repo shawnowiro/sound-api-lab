@@ -1,48 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom Audio Interface</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+        background: #f4f4f9;
+      }
+      .player-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 320px;
+        text-align: center;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+      }
+      .btn-group {
+        display: flex;
+        justify-content: space-around;
+      }
+      button {
+        padding: 10px 15px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background: #007bff;
+        color: white;
+        transition: 0.2s;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .info {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      input[type="range"] {
+        width: 100%;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="player-card">
+      <h3>Custom Audio Player</h3>
 
-<div class="player-card">
-    <h3>Custom Audio Player</h3>
-    
-    <audio id="myAudio">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      <audio id="myAudio">
+        <source
+          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+          type="audio/mpeg"
+        />
         Your browser does not support the audio element.
-    </audio>
+      </audio>
 
-    <div class="info">
-        Status: <span id="status">Stopped</span> <br>
+      <div class="info">
+        Status: <span id="status">Stopped</span> <br />
         Time: <span id="currentTime">0:00</span>
-    </div>
+      </div>
 
-    <div class="controls">
+      <div class="controls">
         <div class="btn-group">
-            <button id="playBtn">Play</button>
-            <button id="pauseBtn">Pause</button>
+          <button id="playBtn">Play</button>
+          <button id="pauseBtn">Pause</button>
         </div>
 
         <label for="volumeSlider">Volume</label>
-        <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+        <input
+          type="range"
+          id="volumeSlider"
+          min="0"
+          max="1"
+          step="0.1"
+          value="1"
+        />
 
         <div class="btn-group">
-            <button id="muteBtn">Mute</button>
-            <select id="speedSelect">
-                <option value="0.5">0.5x Speed</option>
-                <option value="1" selected>Normal Speed</option>
-                <option value="1.5">1.5x Speed</option>
-                <option value="2">2x Speed</option>
-            </select>
+          <button id="muteBtn">Mute</button>
+          <select id="speedSelect">
+            <option value="0.5">0.5x Speed</option>
+            <option value="1" selected>Normal Speed</option>
+            <option value="1.5">1.5x Speed</option>
+            <option value="2">2x Speed</option>
+          </select>
         </div>
+      </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <script>
+      // Selecting DOM elements
+      const audio = document.getElementById("myAudio");
+      const playBtn = document.getElementById("playBtn");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const volumeSlider = document.getElementById("volumeSlider");
+      const muteBtn = document.getElementById("muteBtn");
+      const speedSelect = document.getElementById("speedSelect");
+      const statusText = document.getElementById("status");
+      const timeText = document.getElementById("currentTime");
 
-</body>
+      // 1. Audio Playback
+      playBtn.addEventListener("click", () => {
+        audio.play();
+        statusText.innerText = "Playing...";
+      });
+
+      pauseBtn.addEventListener("click", () => {
+        audio.pause();
+        statusText.innerText = "Paused";
+      });
+
+      // 2. Volume Control
+      volumeSlider.addEventListener("input", (e) => {
+        audio.volume = e.target.value;
+      });
+
+      // 3. Mute & Playback Speed
+      muteBtn.addEventListener("click", () => {
+        audio.muted = !audio.muted;
+        muteBtn.innerText = audio.muted ? "Unmute" : "Mute";
+      });
+
+      speedSelect.addEventListener("change", (e) => {
+        audio.playbackRate = e.target.value;
+      });
+
+      // 4. Display Current Time
+      audio.addEventListener("timeupdate", () => {
+        const minutes = Math.floor(audio.currentTime / 60);
+        const seconds = Math.floor(audio.currentTime % 60);
+        timeText.innerText = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      });
+
+      // 5. Keyboard Controls
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault(); // Stop page from scrolling
+          audio.paused ? audio.play() : audio.pause();
+          statusText.innerText = audio.paused ? "Paused" : "Playing...";
+        }
+      });
+    </script>
+  </body>
 </html>
